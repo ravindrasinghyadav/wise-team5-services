@@ -1,4 +1,4 @@
-package com.db.wise.team5.controller;
+package com.db.wise.team5.repository;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -6,30 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Repository;
 
 import com.db.wise.team5.model.Exam;
 import com.db.wise.team5.model.QuestionAnswers;
-import com.db.wise.team5.repository.WiseQuestionRepositoryDAO;
 
-@RestController
-@RequestMapping("/")
-public class WiseQuestionController {
+@Repository
+public class WiseQuestionRepositoryDAO {
 
-	@Autowired
-	WiseQuestionRepositoryDAO wiseQuestionRepositoryDAO;
-	
-	@RequestMapping("/getQuestionsByCategory")
-	@ResponseBody
-	public Exam getQuestionsByCategory() {
-		System.out.println("getQuestionsByCategory");
-		
-		// validateUser(user);
-		List<QuestionAnswers> listOfQuesAns = new ArrayList<>();
-
+	private static List<QuestionAnswers> listOfQuesAns = new ArrayList<>();
+	static {
 		Map<Integer, String> ansMap = new LinkedHashMap<Integer, String>();
 		ansMap.put(1, "Because their parents did the same thing.");
 		ansMap.put(2, "They earn a better rate than if they invested in long-term stocks.");
@@ -62,14 +48,18 @@ public class WiseQuestionController {
 		listOfQuesAns.add(questionAnswers);
 		listOfQuesAns.add(questionAnswers2);
 		listOfQuesAns.add(questionAnswers3);
-		
+
+		// Topic topic = new Topic(new TopicDetail(listOfQuesAns), 1000);
+
+	}
+
+	public Exam getQuestionaire() {
 		return new Exam(getRandomNumber(), listOfQuesAns);
 
 	}
-	
+
 	private int getRandomNumber() {
 		Random r = new Random(System.currentTimeMillis());
 		return 10000 + r.nextInt(20000);
 	}
-
 }
