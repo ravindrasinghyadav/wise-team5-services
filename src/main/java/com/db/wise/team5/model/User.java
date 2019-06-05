@@ -1,21 +1,23 @@
 package com.db.wise.team5.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
 public class User {
 
 	String firstName;
 	String lastName;
-
-	@Id
-	@GeneratedValue
-	String userId;
-
 	String password;
-	String uniqueUserId;
+	String email;
+
+	public User() {
+		
+	}
+	
+	public User(String firstName, String lastName, String password, String email) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+		this.email = email;
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -33,14 +35,6 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
 	public String getPassword() {
 		return password;
 	}
@@ -49,11 +43,11 @@ public class User {
 		this.password = password;
 	}
 
-	public String getUniqueUserId() {
-		return uniqueUserId;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUniqueUserId(String uniqueUserId) {
-		this.uniqueUserId = uniqueUserId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }
