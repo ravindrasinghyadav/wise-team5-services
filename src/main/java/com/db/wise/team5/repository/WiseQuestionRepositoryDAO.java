@@ -1,9 +1,15 @@
 package com.db.wise.team5.repository;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 import org.springframework.stereotype.Repository;
@@ -49,17 +55,88 @@ public class WiseQuestionRepositoryDAO {
 		listOfQuesAns.add(questionAnswers2);
 		listOfQuesAns.add(questionAnswers3);
 
-		// Topic topic = new Topic(new TopicDetail(listOfQuesAns), 1000);
-
 	}
 
 	public Exam getQuestionaire() {
-		return new Exam(getRandomNumber(), listOfQuesAns);
+		// return new Exam(getRandomNumber(), listOfQuesAns);
+		Connection connection = null;
+		Statement statement = null;
+		Exam exam = null;
+		try {
+			connection = getConnection();
+			statement = connection.createStatement();
+//			ResultSet result = statement.executeQuery(
+//					"select q.question, q.choices, q.right_choice from question_answer q where q.id in (select distinct(e.question_id) from exam e group by exam_id");
+			ResultSet result = statement.executeQuery(
+					"select q.question, q.choices, q.right_choice from question_answer q");
+			List<QuestionAnswers> listOfQuesAns = new ArrayList<>();
+			Map<Integer, String> choiceMap = null;
+			while (result.next()) {
+				System.out.println("q.question : " + result.getString(1));
+				System.out.println("q.choices : " + result.getString(2));
+				System.out.println("q.right_choice : " + result.getString(3));
+				if (result.getString(2) != null) {
+					String[] choicesList = result.getString(2).split("<>");
+					choiceMap = new LinkedHashMap<Integer, String>();
+					for (int i = 0; i < choicesList.length; i++) {
+						String[] keyVals = choicesList[i].split("=");
+						choiceMap.put(Integer.parseInt(keyVals[0].trim()), keyVals[1]);
+					}
+				}
+				QuestionAnswers questionAnswers = new QuestionAnswers(result.getString(1), choiceMap,
+						Integer.parseInt(result.getString(3)));
+				listOfQuesAns.add(questionAnswers);
+			}
+			exam = new Exam(getRandomNumber(), listOfQuesAns);
+
+		} catch (ClassNotFoundException | SQLException e) {
+
+		} finally {
+			try {
+				statement.close();
+				connection.close();
+
+			} catch (SQLException e) {
+				System.out.println("Exception while closing the connection in wiseWuestioRepository java file");
+			}
+		}
+		return exam;
 
 	}
 
 	private int getRandomNumber() {
 		Random r = new Random(System.currentTimeMillis());
 		return 10000 + r.nextInt(20000);
+	}
+
+	private Connection getConnection() throws ClassNotFoundException, SQLException {
+
+		Class.forName("org.postgresql.Driver");
+		String hostName = "team5db1.postgres.database.azure.com";
+		String dbName = "postgres";
+		String user = "team5@team5db1";
+		String password = "CaryHack!";
+		Connection connection = null;
+
+		try {
+			String url = String.format("jdbc:postgresql://%s/%s", hostName, dbName);
+			// set up the connection properties
+			Properties properties = new Properties();
+			properties.setProperty("user", user);
+			properties.setProperty("password", password);
+			properties.setProperty("ssl", "false");
+
+			// get connection
+			connection = DriverManager.getConnection(url, properties);
+		} catch (SQLException e) {
+			throw new SQLException("Failed to create connection to database.", e);
+		}
+
+		if (connection != null) {
+			return connection;
+		} else {
+			throw new SQLException("Unable to coonect to AZURE DATABASE from Wise APP!");
+		}
+
 	}
 }
