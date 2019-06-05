@@ -15,13 +15,14 @@ import com.db.wise.team5.model.Exam;
 import com.db.wise.team5.model.QuestionAnswers;
 import com.db.wise.team5.repository.WiseQuestionRepositoryDAO;
 
+//Test
 @RestController
 @RequestMapping("/")
 public class WiseQuestionController {
 
 	@Autowired
 	WiseQuestionRepositoryDAO wiseQuestionRepositoryDAO;
-	
+
 	@RequestMapping("/getQuestionsByCategory")
 	@ResponseBody
 	public Exam getQuestionsByCategory() {
