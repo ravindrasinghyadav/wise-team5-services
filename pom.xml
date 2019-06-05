@@ -62,39 +62,31 @@
     </dependency> 
   </dependencies>  
   <build> 
-    <plugins> 
-      <plugin> 
-        <groupId>org.springframework.boot</groupId>  
-        <artifactId>spring-boot-maven-plugin</artifactId> 
-      </plugin>  
-      <plugin> 
-        <groupId>com.microsoft.azure</groupId>  
-        <artifactId>azure-webapp-maven-plugin</artifactId>  
-        <!-- check Maven Central for the latest version -->  
-        <version>1.5.3</version>  
+    <plugins>
+      <plugin>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-webapp-maven-plugin</artifactId>
+        <version>1.5.4</version>
         <configuration>
-          <schemaVersion>V2</schemaVersion>
+          <deploymentType>jar</deploymentType>
+
+          <!-- configure app to run on port 80, required by App Service -->
+          <appSettings>
+            <property>
+              <name>JAVA_OPTS</name>
+              <value>-Dserver.port=80</value>
+            </property>
+          </appSettings>
+
+          <!-- Web App information -->
           <resourceGroup>HackCaryTeam5</resourceGroup>
           <appName>wise-team5-services</appName>
-          <region>Central US</region>
-          <pricingTier>P1V2</pricingTier>
-          <runtime>
-            <os>linux</os>
-            <javaVersion>jre8</javaVersion>
-            <webContainer>jre8</webContainer>
-          </runtime>
-          <deployment>
-            <resources>
-              <resource>
-                <directory>${project.basedir}/target</directory>
-                <includes>
-                  <include>*.jar</include>
-                </includes>
-              </resource>
-            </resources>
-          </deployment>
+          <region>centralus</region>
+
+          <!-- Java Runtime Stack for Web App on Linux-->
+          <linuxRuntime>jre8</linuxRuntime>
         </configuration>
-      </plugin> 
+      </plugin>
     </plugins> 
   </build> 
 </project>
