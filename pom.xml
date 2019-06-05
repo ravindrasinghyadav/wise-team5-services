@@ -86,7 +86,10 @@
           <!-- Java Runtime Stack for Web App on Linux-->
           <linuxRuntime>jre8</linuxRuntime>
         </configuration>
+
+
       </plugin>
+
     </plugins> 
   </build> 
 </project>
