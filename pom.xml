@@ -69,6 +69,7 @@
         <version>1.5.4</version>
         <configuration>
           <deploymentType>jar</deploymentType>
+          <subscriptionId>289c907b-dead-4573-80af-dbf923011b1a</subscriptionId>
 
           <!-- configure app to run on port 80, required by App Service -->
           <appSettings>
@@ -79,9 +80,9 @@
           </appSettings>
 
           <!-- Web App information -->
-          <resourceGroup>HackCaryTeam5</resourceGroup>
-          <appName>wise-team5-services</appName>
-          <region>centralus</region>
+          <resourceGroup>teamwise5</resourceGroup>
+          <appName>teamwise5</appName>
+          <region>eastus</region>
 
           <!-- Java Runtime Stack for Web App on Linux-->
           <linuxRuntime>jre8</linuxRuntime>
